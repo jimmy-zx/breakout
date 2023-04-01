@@ -1,11 +1,13 @@
-.include	"inc.s"
-.include	"gdefs.s"
+	.include	"inc1.s"
+	.include	"gdefs.s"
 
 # game_ball_testx() - Test whether collide in x-direction
 #	call this function BEFORE movement
-.globl	game_ball_testx
+	.globl	game_ball_testx
+	.ent	game_ball_testx
 game_ball_testx:
-	fprologue
+	.frame	$fp,24,$ra
+	fprol	24
 	la	$t0,ball_x
 	lw	$a0,0($t0)	# $a0 = ball_x
 	addi	$a0,$a0,-1	# x = ball_x - 1
@@ -21,14 +23,17 @@ game_ball_testx_right:
 	addi	$a0,$a0,1
 game_ball_testx_test:
 	jal	getbox
-	fepilogue
+	fepil	24
 	jr	$ra
+	.end	game_ball_testx
 
 # game_ball_testy() - Test whether collide in y-direction
 #	call this function BEFORE movement
-.globl	game_ball_testy
+	.globl	game_ball_testy
+	.ent	game_ball_testy
 game_ball_testy:
-	fprologue
+	.frame	$fp,24,$ra
+	fprol	24
 	la	$t0,ball_x
 	lw	$a0,0($t0)	# x = ball_x
 	la	$t0,ball_y
@@ -44,14 +49,17 @@ game_ball_testy_bottom:
 	addi	$a1,$a1,1
 game_ball_testy_test:
 	jal	getbox
-	fepilogue
+	fepil	24
 	jr	$ra
+	.end	game_ball_testy
 
 # game_ball_break() - break the collided bricks
 #	can this function AFTER movement and BEFORE re-render
-.globl	game_ball_break
+	.globl	game_ball_break
+	.ent	game_ball_break
 game_ball_break:
-	fprologue
+	.frame	$fp,24,$ra
+	fprol	24
 
 	# we only check the corners
 	# top-left corner
@@ -87,18 +95,18 @@ game_ball_break:
 	addi	$a1,$a1,-1
 	jal	game_brick_break
 
-	fepilogue
+	fepil	24
 	jr	$ra
+	.end	game_ball_break
 
 
 # game_brick_break(x, y) - break a brick if the pixel at (x, y) is a brick
-.globl	game_brick_break
+	.globl	game_brick_break
+	.ent	game_brick_break
 game_brick_break:
-	fprologue
-	addi	$sp,$sp,-12
-	addi	$fp,$fp,-12
-	sw	$s1,24($fp)
-	sw	$s0,20($fp)
+	.frame	$fp,56,$ra
+	fprol	56
+	savesr	56
 
 	move	$s0,$a0
 	move	$s1,$a1
@@ -138,11 +146,9 @@ discard:
 	sw	$t0,16($fp)
 	jal	drawbox	# drawbox(x', y', kBgColor, kBrickWidth, kBrickHeight)
 nodiscard:
-	lw	$s0,20($fp)
-	lw	$s1,24($fp)
-	addi	$fp,$fp,12
-	addi	$sp,$sp,12
-	fepilogue
+	loadsr	56
+	fepil	56
 	jr	$ra
+	.end	game_brick_break
 
 # vim: set noet ts=16 sts=16 sw=16:

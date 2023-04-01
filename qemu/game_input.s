@@ -1,11 +1,13 @@
-.include	"inc.s"
-.include	"gdefs.s"
+	.include	"inc1.s"
+	.include	"gdefs.s"
 
 .text
 
-.globl	game_input
+	.globl	game_input
+	.ent	game_input
 game_input:
-	fprologue
+	.frame	$fp,24,$ra
+	fprol	24
 
 	jal	kbd_keypressed
 	beq	$v0,$0,action_continue
@@ -19,18 +21,15 @@ game_input:
 
 action_continue:
 	li	$v0,0
-	fepilogue
-	jr	$ra
+	b	action_ret
 
 action_quit:
 	li	$v0,1
-	fepilogue
-	jr	$ra
+	b	action_ret
 
 action_restart:
 	li	$v0,2
-	fepilogue
-	jr	$ra
+	b	action_ret
 
 action_paddle:
 	la	$s0,paddle_x
@@ -43,6 +42,11 @@ action_paddle:
 	li	$a0,kPaddleColor
 	jal	game_render_paddle	# add the new paddle
 	j	action_continue
+
+action_ret:
+	fepil	24
+	jr	$ra
+	.end	game_input
 
 
 # vim: set noet ts=16 sts=16 sw=16:
