@@ -1,0 +1,3 @@
+[submodule "marsemu"]
+	path = marsemu
+	url = https://github.com/jimmy-zx/marsemu.git
