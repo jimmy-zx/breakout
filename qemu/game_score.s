@@ -49,6 +49,12 @@ game_scoreinit:
 	li	$a3,0xffffff
 	jal	drawfont	# drawfont('S', 8, 0, 0xffffff)
 
+	li	$a0,'+'
+	li	$a1,104
+	li	$a2,0
+	li	$a3,0xffffff
+	jal	drawfont	# drawfont('S', 8, 0, 0xffffff)
+
 	fepil	24
 	jr	$ra
 	.end	game_scoreinit
@@ -112,5 +118,31 @@ game_scoreupdate:
 	fepil	60
 	jr	$ra
 	.end	game_scoreupdate
+
+	.globl	game_lifeupdate
+	.ent	game_lifeupdate
+game_lifeupdate:
+	.frame	$fp,28,$ra
+	fprol	28
+
+	# life
+	li	$a0,112
+	li	$a1,0
+	li	$a2,kBgColor
+	li	$a3,8
+	li	$t0,16
+	sw	$t0,16($sp)
+	jal	drawbox
+	la	$t0,life
+	lw	$t1,0($t0)
+	addi	$a0,$t1,'0'
+	li	$a1,112
+	li	$a2,0
+	li	$a3,0xffffff
+	jal	drawfont
+
+	fepil	28
+	jr	$ra
+	.end	game_lifeupdate
 
 # vim: set noet ts=16 sts=16 sw=16:

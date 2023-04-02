@@ -132,6 +132,7 @@ game_startround:
 	.frame	$fp,24,$ra
 	fprol	24
 
+	jal	game_lifeupdate
 	# clear ball
 	li	$a0,kBgColor
 	jal	game_render_ball

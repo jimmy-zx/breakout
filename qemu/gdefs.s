@@ -49,6 +49,6 @@
 .eqv	kKeyPause,0x70
 
 # life
-.eqv	kLife,0x3
+.eqv	kLife,0x2
 
 # vim: set noet ts=16 sts=16 sw=16:
