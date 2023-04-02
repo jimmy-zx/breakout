@@ -20,6 +20,12 @@ ball_vx:	.word	0
 	.globl	ball_vy
 ball_vy:	.word	0
 
+	.globl	key_press
+key_press:	.word	0
+
+	.globl	pause
+pause:	.word	0
+
 .text
 
 # run() - the main game loop

@@ -10,6 +10,11 @@ game_tick:
 	fprol	56
 	savesr	56
 
+	# if paused, do not tick
+	la	$t0,pause
+	lw	$t1,0($t0)
+	bne	$t1,0,finish
+
 	# flip dy if collide
 	jal	game_ball_testy
 	beq	$v0,$zero,nochangevy

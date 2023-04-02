@@ -22,11 +22,11 @@
 .eqv	kBrickColor4,0xC2C229
 
 # paddle
-# .eqv	kPaddleInitX,112
-.eqv	kPaddleInitX,0
+.eqv	kPaddleInitX,112
+#.eqv	kPaddleInitX,0
 .eqv	kPaddleInitY,220
-# .eqv	kPaddleWidth,32
-.eqv	kPaddleWidth,255
+ .eqv	kPaddleWidth,32
+#.eqv	kPaddleWidth,255
 .eqv	kPaddleHeight,4
 .eqv	kPaddleColor,0x0A85C2
 .eqv	kPaddleV,4
@@ -45,5 +45,6 @@
 .eqv	kKeyLeft,0x61
 .eqv	kKeyRight,0x64
 .eqv	kKeyRestart,0x72
+.eqv	kKeyPause,0x70
 
 # vim: set noet ts=16 sts=16 sw=16:
