@@ -27,6 +27,9 @@ game_start:
 	sw	$t0,16($fp)
 	jal	drawbox
 
+	la	$t0,cscore
+	li	$t1,0
+	sw	$t1,0($t0)
 	jal	game_scoreinit
 	jal	game_scoreupdate
 
