@@ -27,6 +27,10 @@ game_start:
 	sw	$t0,16($fp)
 	jal	drawbox
 
+	la	$t0,life
+	li	$t1,kLife
+	sw	$t1,0($t0)
+
 	la	$t0,cscore
 	lw	$t1,0($t0)
 	la	$t2,max_score
@@ -117,6 +121,20 @@ brick_loop:
 	li	$a0,kPaddleColor
 	jal	game_render_paddle
 
+	loadsr	60
+	fepil	60
+	jr	$ra
+	.end	game_start
+
+	.globl	game_startround
+	.ent	game_startround
+game_startround:
+	.frame	$fp,24,$ra
+	fprol	24
+
+	# clear ball
+	li	$a0,kBgColor
+	jal	game_render_ball
 	# initialize ball location
 	la	$t0,ball_x
 	li	$t1,kBallInitX
@@ -134,9 +152,8 @@ brick_loop:
 	li	$a0,kBallColor
 	jal	game_render_ball
 
-	loadsr	60
-	fepil	60
+
+	fepil	24
 	jr	$ra
-	.end	game_start
 
 # vim: set noet ts=16 sts=16 sw=16:

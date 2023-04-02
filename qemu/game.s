@@ -1,4 +1,5 @@
-.include "inc1.s"
+	.include	"inc1.s"
+	.include	"gdefs.s"
 
 .data
 
@@ -9,10 +10,10 @@ paddle_x:	.word	0
 paddle_y:	.word	0
 
 	.globl	ball_x
-ball_x:	.word	0
+ball_x:	.word	kBallInitX
 
 	.globl	ball_y
-ball_y:	.word	0
+ball_y:	.word	kBallInitY
 
 	.globl	ball_vx
 ball_vx:	.word	0
@@ -32,6 +33,9 @@ cscore:	.word	0
 	.globl	max_score
 max_score:	.word	0
 
+	.globl	life
+life:	.word	kLife
+
 .text
 
 # run() - the main game loop
@@ -45,12 +49,21 @@ run:
 	bne	$v0,$zero,run_ret
 main_loop:
 	jal	game_start
+game_round:
+	jal	game_startround
 game_loop:
 	jal	game_input
 	beq	$v0,1,run_end
 	beq	$v0,2,main_loop
 	jal	game_tick
-#	bne	$v0,$zero,game_end
+	beq	$v0,$zero,game_next
+	la	$t0,life
+	lw	$t1,0($t0)
+	beq	$t1,$0,game_next
+	addi	$t1,$t1,-1
+	sw	$t1,0($t0)
+	b	game_round
+game_next:
 	jal	game_render
 	jal	game_sleep
 	j	game_loop
