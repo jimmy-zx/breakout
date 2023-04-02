@@ -59,7 +59,7 @@ game_loop:
 	beq	$v0,$zero,game_next
 	la	$t0,life
 	lw	$t1,0($t0)
-	beq	$t1,$0,game_next
+	beq	$t1,1,game_next
 	addi	$t1,$t1,-1
 	sw	$t1,0($t0)
 	b	game_round
