@@ -29,6 +29,9 @@ pause:	.word	0
 	.globl	cscore
 cscore:	.word	0
 
+	.globl	max_score
+max_score:	.word	0
+
 .text
 
 # run() - the main game loop

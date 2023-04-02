@@ -28,6 +28,12 @@ game_start:
 	jal	drawbox
 
 	la	$t0,cscore
+	lw	$t1,0($t0)
+	la	$t2,max_score
+	lw	$t3,0($t2)
+	ble	$t1,$t3,noupdatemaxscore
+	sw	$t1,0($t2)
+noupdatemaxscore:
 	li	$t1,0
 	sw	$t1,0($t0)
 	jal	game_scoreinit

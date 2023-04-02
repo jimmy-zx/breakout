@@ -60,6 +60,7 @@ game_scoreupdate:
 	fprol	60
 	savesr	60
 
+	# cscore
 	li	$a0,56
 	li	$a1,0
 	li	$a2,kBgColor
@@ -67,7 +68,6 @@ game_scoreupdate:
 	li	$t0,16
 	sw	$t0,16($sp)
 	jal	drawbox	# drawbox(56, 0, kBgColor, 16, 16)
-
 	la	$t0,cscore
 	lw	$t1,0($t0)
 	div	$t1,10
@@ -83,6 +83,31 @@ game_scoreupdate:
 	li	$a2,0
 	li	$a3,0xffffff
 	jal	drawfont	# drawfont(score // 10 + '0', 64, 0, 0xffffff)
+
+	# max_score
+	li	$a0,80
+	li	$a1,0
+	li	$a2,kBgColor
+	li	$a3,16
+	li	$t0,16
+	sw	$t0,16($sp)
+	jal	drawbox	# drawbox(56, 0, kBgColor, 16, 16)
+	la	$t0,max_score
+	lw	$t1,0($t0)
+	div	$t1,10
+	mfhi	$s1	# s1 = score % 10
+	mflo	$s0	# s0 = score // 10
+	addi	$a0,$s0,'0'
+	li	$a1,80
+	li	$a2,0
+	li	$a3,0xffffff
+	jal	drawfont	# drawfont(score % 10 + '0', 56, 0, 0xffffff)
+	addi	$a0,$s1,'0'
+	li	$a1,88
+	li	$a2,0
+	li	$a3,0xffffff
+	jal	drawfont	# drawfont(score // 10 + '0', 64, 0, 0xffffff)
+
 	loadsr	60
 	fepil	60
 	jr	$ra
