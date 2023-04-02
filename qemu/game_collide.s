@@ -13,6 +13,9 @@ game_ball_testx:
 	addi	$a0,$a0,-1	# x = ball_x - 1
 	la	$t0,ball_y
 	lw	$a1,0($t0)	# y = ball_y
+	la	$t0,ball_vy
+	lw	$t1,0($t0)	# $t1 = ball_vy
+	add	$a1,$a1,$t1	# y = ball_y + ball_vy
 	li	$a2,1	# dx = 1
 	li	$a3,kBallHeight	# dy = kBallHeight
 	la	$t0,ball_vx
@@ -144,10 +147,10 @@ discard:
 	sw	$t1,0($t0)	# cscore += 1
 	jal	game_scoreupdate
 	# debug
-	move	$a0,$s0
-	move	$a1,$s1
-	li	$a2,0xFFFFFF
-	jal	plot_draw
+	#move	$a0,$s0
+	#move	$a1,$s1
+	#li	$a2,0xFFFFFF
+	#jal	plot_draw
 	move	$a0,$s0
 	move	$a1,$s1
 	li	$a2,kBgColor
