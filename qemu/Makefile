@@ -11,6 +11,9 @@ game_start.o: game_start.s gdefs.s
 game: qemurun.o game.o game_init.o game_start.o game_input.o game_tick.o game_render.o game_deinit.o game_sleep.o game_collide.o $(LIB)
 	$(CC) $(CFLAGS) -o $@ $^ -static
 
+run_drawfont: run_drawfont.s drawfont.s font.s $(LIB)
+	$(CC) $(CFLAGS) -o $@ $^ -static
+
 %.o: %.s
 	$(CC) $(CFLAGS) -o $@ -c $<
 
