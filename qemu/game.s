@@ -1,8 +1,4 @@
-	.include	"inc1.s"
-	.include	"gdefs.s"
-
 .data
-
 	.globl	paddle_x
 paddle_x:	.word	0
 
@@ -37,6 +33,8 @@ max_score:	.word	0
 life:	.word	kLife
 
 .text
+	.include	"inc1.s"
+	.include	"gdefs.s"
 
 # run() - the main game loop
 	.globl	run
@@ -59,12 +57,14 @@ game_loop:
 	beq	$v0,$zero,game_next
 	la	$t0,life
 	lw	$t1,0($t0)
-	beq	$t1,0,game_next
+	beq	$t1,0,game_norender
 	addi	$t1,$t1,-1
 	sw	$t1,0($t0)
-	b	game_round
+	bne	$t1,0,game_round
+	jal	game_menu_over
 game_next:
 	jal	game_render
+game_norender:
 	jal	game_sleep
 	j	game_loop
 game_end:

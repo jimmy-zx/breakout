@@ -2,6 +2,7 @@
 .eqv	kWidth,256
 .eqv	kHeight,256
 .eqv	kBgColor,0x000000
+.eqv	kFgColor,0xFFFFFF
 
 # wall
 .eqv	kTWallTMargin,20
