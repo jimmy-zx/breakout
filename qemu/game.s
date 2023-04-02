@@ -26,6 +26,9 @@ key_press:	.word	0
 	.globl	pause
 pause:	.word	0
 
+	.globl	cscore
+cscore:	.word	0
+
 .text
 
 # run() - the main game loop

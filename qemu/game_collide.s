@@ -104,9 +104,9 @@ game_ball_break:
 	.globl	game_brick_break
 	.ent	game_brick_break
 game_brick_break:
-	.frame	$fp,56,$ra
-	fprol	56
-	savesr	56
+	.frame	$fp,60,$ra
+	fprol	60
+	savesr	60
 
 	move	$s0,$a0
 	move	$s1,$a1
@@ -138,6 +138,16 @@ findminy:
 	addi	$s1,$s1,-1	# y -= 1
 	j	findminy
 discard:
+	la	$t0,cscore
+	lw	$t1,0($t0)
+	addi	$t1,$t1,1
+	sw	$t1,0($t0)	# cscore += 1
+	jal	game_scoreupdate
+	# debug
+	move	$a0,$s0
+	move	$a1,$s1
+	li	$a2,0xFFFFFF
+	jal	plot_draw
 	move	$a0,$s0
 	move	$a1,$s1
 	li	$a2,kBgColor
@@ -146,8 +156,8 @@ discard:
 	sw	$t0,16($fp)
 	jal	drawbox	# drawbox(x', y', kBgColor, kBrickWidth, kBrickHeight)
 nodiscard:
-	loadsr	56
-	fepil	56
+	loadsr	60
+	fepil	60
 	jr	$ra
 	.end	game_brick_break
 

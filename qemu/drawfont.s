@@ -32,7 +32,7 @@ drawfont_next:
 	addi	$s3,$s3,1	# screen_x += 1
 	bne	$s0,0,drawfont_loop
 	li	$s0,7	# dx = 0
-	lw	$s3,64($sp)	# screen_x = x
+	lw	$s3,60($sp)	# screen_x = x
 	addi	$s1,$s1,1	# dy += 1
 	addi	$s4,$s4,1	# screen_y += 1
 	addi	$s2,$s2,4	# ptr += 1 WORD

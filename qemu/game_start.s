@@ -27,10 +27,13 @@ game_start:
 	sw	$t0,16($fp)
 	jal	drawbox
 
+	jal	game_scoreinit
+	jal	game_scoreupdate
+
 	# draw top wall
-	# draw(x=0, y=0, color=kWallColor, dx=kWidth, dy=kWallWidth)
+	# draw(x=0, y=kTWallTMargin, color=kWallColor, dx=kWidth, dy=kWallWidth)
 	li	$a0,0
-	li	$a1,0
+	li	$a1,kTWallTMargin
 	li	$a2,kWallColor
 	li	$a3,kWidth
 	li	$t0,kWallWidth
