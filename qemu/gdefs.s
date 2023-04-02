@@ -10,9 +10,9 @@
 
 # brick
 .eqv	kBrickRow,4
-.eqv	kBrickColumn,16
+.eqv	kBrickColumn,14
 .eqv	kBrickTMargin,32	# the y-axis of the first brick
-.eqv	kBrickLMargin,1	# the x-axis of the first brick
+.eqv	kBrickLMargin,16	# the x-axis of the first brick
 .eqv	kBrickHeight,5
 .eqv	kBrickWidth,14
 .eqv	kBrickVSpace,2
