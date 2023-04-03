@@ -1,3 +1,4 @@
+.data
 # generated from Lat15-Terminus16.psf
 	.globl	font_begin
 font_begin:
