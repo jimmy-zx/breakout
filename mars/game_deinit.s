@@ -2,6 +2,6 @@
 
 .globl	game_deinit
 game_deinit:
-	jr	$ra
+	jr	$ra	
 
 # vim: set noet ts=16 sts=16 sw=16:
