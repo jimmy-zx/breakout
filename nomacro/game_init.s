@@ -9,16 +9,18 @@
 .eqv	kWidth,256
 .eqv	kHeight,256
 .eqv	kBgColor,0x000000
+.eqv	kFgColor,0xFFFFFF
 
 # wall
+.eqv	kTWallTMargin,20
 .eqv	kWallWidth,4
 .eqv	kWallColor,0xCCCCCC
 
 # brick
 .eqv	kBrickRow,4
-.eqv	kBrickColumn,16
-.eqv	kBrickTMargin,16	# the y-axis of the first brick
-.eqv	kBrickLMargin,1	# the x-axis of the first brick
+.eqv	kBrickColumn,14
+.eqv	kBrickTMargin,32	# the y-axis of the first brick
+.eqv	kBrickLMargin,16	# the x-axis of the first brick
 .eqv	kBrickHeight,5
 .eqv	kBrickWidth,14
 .eqv	kBrickVSpace,2
@@ -29,11 +31,11 @@
 .eqv	kBrickColor4,0xC2C229
 
 # paddle
-# .eqv	kPaddleInitX,112
-.eqv	kPaddleInitX,0
+#.eqv	kPaddleInitX,0	# developer mode
+#.eqv	kPaddleWidth,255	# developer mode
+.eqv	kPaddleInitX,112
+.eqv	kPaddleWidth,32
 .eqv	kPaddleInitY,220
-# .eqv	kPaddleWidth,32
-.eqv	kPaddleWidth,255
 .eqv	kPaddleHeight,4
 .eqv	kPaddleColor,0x0A85C2
 .eqv	kPaddleV,4
@@ -52,6 +54,10 @@
 .eqv	kKeyLeft,0x61
 .eqv	kKeyRight,0x64
 .eqv	kKeyRestart,0x72
+.eqv	kKeyPause,0x70
+
+# life
+.eqv	kLife,0x3
 
 # vim: set noet ts=16 sts=16 sw=16:
 

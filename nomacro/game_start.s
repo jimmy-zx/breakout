@@ -3,16 +3,18 @@
 .eqv	kWidth,256
 .eqv	kHeight,256
 .eqv	kBgColor,0x000000
+.eqv	kFgColor,0xFFFFFF
 
 # wall
+.eqv	kTWallTMargin,20
 .eqv	kWallWidth,4
 .eqv	kWallColor,0xCCCCCC
 
 # brick
 .eqv	kBrickRow,4
-.eqv	kBrickColumn,16
-.eqv	kBrickTMargin,16	# the y-axis of the first brick
-.eqv	kBrickLMargin,1	# the x-axis of the first brick
+.eqv	kBrickColumn,14
+.eqv	kBrickTMargin,32	# the y-axis of the first brick
+.eqv	kBrickLMargin,16	# the x-axis of the first brick
 .eqv	kBrickHeight,5
 .eqv	kBrickWidth,14
 .eqv	kBrickVSpace,2
@@ -23,11 +25,11 @@
 .eqv	kBrickColor4,0xC2C229
 
 # paddle
-# .eqv	kPaddleInitX,112
-.eqv	kPaddleInitX,0
+#.eqv	kPaddleInitX,0	# developer mode
+#.eqv	kPaddleWidth,255	# developer mode
+.eqv	kPaddleInitX,112
+.eqv	kPaddleWidth,32
 .eqv	kPaddleInitY,220
-# .eqv	kPaddleWidth,32
-.eqv	kPaddleWidth,255
 .eqv	kPaddleHeight,4
 .eqv	kPaddleColor,0x0A85C2
 .eqv	kPaddleV,4
@@ -46,6 +48,10 @@
 .eqv	kKeyLeft,0x61
 .eqv	kKeyRight,0x64
 .eqv	kKeyRestart,0x72
+.eqv	kKeyPause,0x70
+
+# life
+.eqv	kLife,0x3
 
 # vim: set noet ts=16 sts=16 sw=16:
 # 	.include	"inc1.s"
@@ -97,10 +103,26 @@ game_start:
 	sw	$t0,16($fp)	
 	jal	drawbox	
 
+	la	$t0,life	
+	li	$t1,kLife	
+	sw	$t1,0($t0)	
+
+	la	$t0,cscore	
+	lw	$t1,0($t0)	
+	la	$t2,max_score	
+	lw	$t3,0($t2)	
+	ble	$t1,$t3,noupdatemaxscore	
+	sw	$t1,0($t2)	
+noupdatemaxscore:
+	li	$t1,0	
+	sw	$t1,0($t0)	
+	jal	game_scoreinit	
+	jal	game_scoreupdate	
+
 	# draw top wall
-	# draw(x=0, y=0, color=kWallColor, dx=kWidth, dy=kWallWidth)
+	# draw(x=0, y=kTWallTMargin, color=kWallColor, dx=kWidth, dy=kWallWidth)
 	li	$a0,0	
-	li	$a1,0	
+	li	$a1,kTWallTMargin	
 	li	$a2,kWallColor	
 	li	$a3,kWidth	
 	li	$t0,kWallWidth	
@@ -175,6 +197,41 @@ brick_loop:
 	li	$a0,kPaddleColor	
 	jal	game_render_paddle	
 
+# 	loadsr	60
+	lw	$s7,48($sp)	
+	lw	$s6,44($sp)	
+	lw	$s5,40($sp)	
+	lw	$s4,36($sp)	
+	lw	$s3,32($sp)	
+	lw	$s2,28($sp)	
+	lw	$s1,24($sp)	
+	lw	$s0,20($sp)	
+# 	fepil	60
+	move	$sp,$fp	
+	lw	$ra,56($sp)	
+	lw	$fp,52($sp)	
+	addiu	$sp,$sp,60	
+	jr	$ra	
+	.end	game_start
+
+	.globl	game_startround
+	.ent	game_startround
+game_startround:
+	.frame	$fp,24,$ra
+# 	fprol	24
+	addiu	$sp,$sp,-24	
+	sw	$a3,36($sp)	
+	sw	$a2,32($sp)	
+	sw	$a1,28($sp)	
+	sw	$a0,24($sp)	
+	sw	$ra,20($sp)	
+	sw	$fp,16($sp)	
+	move	$fp,$sp	
+
+	jal	game_lifeupdate	
+	# clear ball
+	li	$a0,kBgColor	
+	jal	game_render_ball	
 	# initialize ball location
 	la	$t0,ball_x	
 	li	$t1,kBallInitX	
@@ -192,21 +249,12 @@ brick_loop:
 	li	$a0,kBallColor	
 	jal	game_render_ball	
 
-# 	loadsr	60
-	lw	$s7,48($sp)	
-	lw	$s6,44($sp)	
-	lw	$s5,40($sp)	
-	lw	$s4,36($sp)	
-	lw	$s3,32($sp)	
-	lw	$s2,28($sp)	
-	lw	$s1,24($sp)	
-	lw	$s0,20($sp)	
-# 	fepil	60
+
+# 	fepil	24
 	move	$sp,$fp	
-	lw	$ra,56($sp)	
-	lw	$fp,52($sp)	
-	addiu	$sp,$sp,60	
+	lw	$ra,20($sp)	
+	lw	$fp,16($sp)	
+	addiu	$sp,$sp,24	
 	jr	$ra	
-	.end	game_start
 
 # vim: set noet ts=16 sts=16 sw=16:

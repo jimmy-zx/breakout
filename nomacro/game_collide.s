@@ -1,23 +1,26 @@
-# .include	"inc.s"
+# 	.include	"inc1.s"
 
 
 
-# vim: set noet ts=16 sts=16 sw=16:
-# .include	"gdefs.s"
+
+# vim: set noet ts=8 sts=8 sw=8:
+# 	.include	"gdefs.s"
 # display
 .eqv	kWidth,256
 .eqv	kHeight,256
 .eqv	kBgColor,0x000000
+.eqv	kFgColor,0xFFFFFF
 
 # wall
+.eqv	kTWallTMargin,20
 .eqv	kWallWidth,4
 .eqv	kWallColor,0xCCCCCC
 
 # brick
 .eqv	kBrickRow,4
-.eqv	kBrickColumn,16
-.eqv	kBrickTMargin,16	# the y-axis of the first brick
-.eqv	kBrickLMargin,1	# the x-axis of the first brick
+.eqv	kBrickColumn,14
+.eqv	kBrickTMargin,32	# the y-axis of the first brick
+.eqv	kBrickLMargin,16	# the x-axis of the first brick
 .eqv	kBrickHeight,5
 .eqv	kBrickWidth,14
 .eqv	kBrickVSpace,2
@@ -28,11 +31,11 @@
 .eqv	kBrickColor4,0xC2C229
 
 # paddle
-# .eqv	kPaddleInitX,112
-.eqv	kPaddleInitX,0
+#.eqv	kPaddleInitX,0	# developer mode
+#.eqv	kPaddleWidth,255	# developer mode
+.eqv	kPaddleInitX,112
+.eqv	kPaddleWidth,32
 .eqv	kPaddleInitY,220
-# .eqv	kPaddleWidth,32
-.eqv	kPaddleWidth,255
 .eqv	kPaddleHeight,4
 .eqv	kPaddleColor,0x0A85C2
 .eqv	kPaddleV,4
@@ -51,28 +54,36 @@
 .eqv	kKeyLeft,0x61
 .eqv	kKeyRight,0x64
 .eqv	kKeyRestart,0x72
+.eqv	kKeyPause,0x70
+
+# life
+.eqv	kLife,0x3
 
 # vim: set noet ts=16 sts=16 sw=16:
 
 # game_ball_testx() - Test whether collide in x-direction
 #	call this function BEFORE movement
-.globl	game_ball_testx
+	.globl	game_ball_testx
+	.ent	game_ball_testx
 game_ball_testx:
-# 	fprologue
-	addi	$sp,$sp,-24	# stack (24)
-	sw	$fp,16($sp)	# backup old $fp
-	addi	$fp,$sp,0	# setup new $fp
-	sw	$a3,36($fp)	# 36($fp) = $a3
-	sw	$a2,32($fp)	# 32($fp) = $a2
-	sw	$a1,28($fp)	# 28($fp) = $a1
-	sw	$a0,24($fp)	# 24($fp) = $a0
-	sw	$ra,20($fp)	# 20($fp) = $ra
-			# 16($fp) = old $fp
+	.frame	$fp,24,$ra
+# 	fprol	24
+	addiu	$sp,$sp,-24	
+	sw	$a3,36($sp)	
+	sw	$a2,32($sp)	
+	sw	$a1,28($sp)	
+	sw	$a0,24($sp)	
+	sw	$ra,20($sp)	
+	sw	$fp,16($sp)	
+	move	$fp,$sp	
 	la	$t0,ball_x	
 	lw	$a0,0($t0)	# $a0 = ball_x
 	addi	$a0,$a0,-1	# x = ball_x - 1
 	la	$t0,ball_y	
 	lw	$a1,0($t0)	# y = ball_y
+	la	$t0,ball_vy	
+	lw	$t1,0($t0)	# $t1 = ball_vy
+	add	$a1,$a1,$t1	# y = ball_y + ball_vy
 	li	$a2,1	# dx = 1
 	li	$a3,kBallHeight	# dy = kBallHeight
 	la	$t0,ball_vx	
@@ -83,26 +94,29 @@ game_ball_testx_right:
 	addi	$a0,$a0,1	
 game_ball_testx_test:
 	jal	getbox	
-# 	fepilogue
-	lw	$ra,20($fp)	
-	lw	$fp,16($fp)	
-	addi	$sp,$sp,24	
+# 	fepil	24
+	move	$sp,$fp	
+	lw	$ra,20($sp)	
+	lw	$fp,16($sp)	
+	addiu	$sp,$sp,24	
 	jr	$ra	
+	.end	game_ball_testx
 
 # game_ball_testy() - Test whether collide in y-direction
 #	call this function BEFORE movement
-.globl	game_ball_testy
+	.globl	game_ball_testy
+	.ent	game_ball_testy
 game_ball_testy:
-# 	fprologue
-	addi	$sp,$sp,-24	# stack (24)
-	sw	$fp,16($sp)	# backup old $fp
-	addi	$fp,$sp,0	# setup new $fp
-	sw	$a3,36($fp)	# 36($fp) = $a3
-	sw	$a2,32($fp)	# 32($fp) = $a2
-	sw	$a1,28($fp)	# 28($fp) = $a1
-	sw	$a0,24($fp)	# 24($fp) = $a0
-	sw	$ra,20($fp)	# 20($fp) = $ra
-			# 16($fp) = old $fp
+	.frame	$fp,24,$ra
+# 	fprol	24
+	addiu	$sp,$sp,-24	
+	sw	$a3,36($sp)	
+	sw	$a2,32($sp)	
+	sw	$a1,28($sp)	
+	sw	$a0,24($sp)	
+	sw	$ra,20($sp)	
+	sw	$fp,16($sp)	
+	move	$fp,$sp	
 	la	$t0,ball_x	
 	lw	$a0,0($t0)	# x = ball_x
 	la	$t0,ball_y	
@@ -118,26 +132,29 @@ game_ball_testy_bottom:
 	addi	$a1,$a1,1	
 game_ball_testy_test:
 	jal	getbox	
-# 	fepilogue
-	lw	$ra,20($fp)	
-	lw	$fp,16($fp)	
-	addi	$sp,$sp,24	
+# 	fepil	24
+	move	$sp,$fp	
+	lw	$ra,20($sp)	
+	lw	$fp,16($sp)	
+	addiu	$sp,$sp,24	
 	jr	$ra	
+	.end	game_ball_testy
 
 # game_ball_break() - break the collided bricks
 #	can this function AFTER movement and BEFORE re-render
-.globl	game_ball_break
+	.globl	game_ball_break
+	.ent	game_ball_break
 game_ball_break:
-# 	fprologue
-	addi	$sp,$sp,-24	# stack (24)
-	sw	$fp,16($sp)	# backup old $fp
-	addi	$fp,$sp,0	# setup new $fp
-	sw	$a3,36($fp)	# 36($fp) = $a3
-	sw	$a2,32($fp)	# 32($fp) = $a2
-	sw	$a1,28($fp)	# 28($fp) = $a1
-	sw	$a0,24($fp)	# 24($fp) = $a0
-	sw	$ra,20($fp)	# 20($fp) = $ra
-			# 16($fp) = old $fp
+	.frame	$fp,24,$ra
+# 	fprol	24
+	addiu	$sp,$sp,-24	
+	sw	$a3,36($sp)	
+	sw	$a2,32($sp)	
+	sw	$a1,28($sp)	
+	sw	$a0,24($sp)	
+	sw	$ra,20($sp)	
+	sw	$fp,16($sp)	
+	move	$fp,$sp	
 
 	# we only check the corners
 	# top-left corner
@@ -173,30 +190,38 @@ game_ball_break:
 	addi	$a1,$a1,-1	
 	jal	game_brick_break	
 
-# 	fepilogue
-	lw	$ra,20($fp)	
-	lw	$fp,16($fp)	
-	addi	$sp,$sp,24	
+# 	fepil	24
+	move	$sp,$fp	
+	lw	$ra,20($sp)	
+	lw	$fp,16($sp)	
+	addiu	$sp,$sp,24	
 	jr	$ra	
+	.end	game_ball_break
 
 
 # game_brick_break(x, y) - break a brick if the pixel at (x, y) is a brick
-.globl	game_brick_break
+	.globl	game_brick_break
+	.ent	game_brick_break
 game_brick_break:
-# 	fprologue
-	addi	$sp,$sp,-24	# stack (24)
-	sw	$fp,16($sp)	# backup old $fp
-	addi	$fp,$sp,0	# setup new $fp
-	sw	$a3,36($fp)	# 36($fp) = $a3
-	sw	$a2,32($fp)	# 32($fp) = $a2
-	sw	$a1,28($fp)	# 28($fp) = $a1
-	sw	$a0,24($fp)	# 24($fp) = $a0
-	sw	$ra,20($fp)	# 20($fp) = $ra
-			# 16($fp) = old $fp
-	addi	$sp,$sp,-12	
-	addi	$fp,$fp,-12	
-	sw	$s1,24($fp)	
-	sw	$s0,20($fp)	
+	.frame	$fp,60,$ra
+# 	fprol	60
+	addiu	$sp,$sp,-60	
+	sw	$a3,72($sp)	
+	sw	$a2,68($sp)	
+	sw	$a1,64($sp)	
+	sw	$a0,60($sp)	
+	sw	$ra,56($sp)	
+	sw	$fp,52($sp)	
+	move	$fp,$sp	
+# 	savesr	60
+	sw	$s7,48($sp)	
+	sw	$s6,44($sp)	
+	sw	$s5,40($sp)	
+	sw	$s4,36($sp)	
+	sw	$s3,32($sp)	
+	sw	$s2,28($sp)	
+	sw	$s1,24($sp)	
+	sw	$s0,20($sp)	
 
 	move	$s0,$a0	
 	move	$s1,$a1	
@@ -228,6 +253,16 @@ findminy:
 	addi	$s1,$s1,-1	# y -= 1
 	j	findminy	
 discard:
+	la	$t0,cscore	
+	lw	$t1,0($t0)	
+	addi	$t1,$t1,1	
+	sw	$t1,0($t0)	# cscore += 1
+	jal	game_scoreupdate	
+	# debug
+	#move	$a0,$s0
+	#move	$a1,$s1
+	#li	$a2,0xFFFFFF
+	#jal	plot_draw
 	move	$a0,$s0	
 	move	$a1,$s1	
 	li	$a2,kBgColor	
@@ -236,14 +271,21 @@ discard:
 	sw	$t0,16($fp)	
 	jal	drawbox	# drawbox(x', y', kBgColor, kBrickWidth, kBrickHeight)
 nodiscard:
-	lw	$s0,20($fp)	
-	lw	$s1,24($fp)	
-	addi	$fp,$fp,12	
-	addi	$sp,$sp,12	
-# 	fepilogue
-	lw	$ra,20($fp)	
-	lw	$fp,16($fp)	
-	addi	$sp,$sp,24	
+# 	loadsr	60
+	lw	$s7,48($sp)	
+	lw	$s6,44($sp)	
+	lw	$s5,40($sp)	
+	lw	$s4,36($sp)	
+	lw	$s3,32($sp)	
+	lw	$s2,28($sp)	
+	lw	$s1,24($sp)	
+	lw	$s0,20($sp)	
+# 	fepil	60
+	move	$sp,$fp	
+	lw	$ra,56($sp)	
+	lw	$fp,52($sp)	
+	addiu	$sp,$sp,60	
 	jr	$ra	
+	.end	game_brick_break
 
 # vim: set noet ts=16 sts=16 sw=16:
