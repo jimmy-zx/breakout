@@ -53,6 +53,7 @@ action_paddle:
 	la	$s0,paddle_x
 	lw	$s1,0($s0)
 	add	$s1,$s1,$t0
+	bltu	$s1,4,action_continue
 	bgeu	$s1,224,action_continue	# TODO: remove magic number
 	li	$a0,kBgColor
 	jal	game_render_paddle	# remove the previous paddle

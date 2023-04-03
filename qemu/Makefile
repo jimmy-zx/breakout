@@ -23,7 +23,7 @@ server:
 	./marsemu/build/server
 
 rgame: game
-	./game
+	qemu-mips ./game
 
 rdebug: game
 	qemu-mips -g 1234 ./game
