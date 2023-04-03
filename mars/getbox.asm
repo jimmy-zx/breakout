@@ -1,4 +1,4 @@
-.include	"inc.s"
+.include	"inc.asm"
 
 .text
 # getbox(x, y, dx, dy)

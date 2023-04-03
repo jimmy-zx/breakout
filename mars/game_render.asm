@@ -1,4 +1,4 @@
-.include	"inc.s"
+.include	"inc.asm"
 .include	"gdefs.s"
 
 .text

@@ -1,4 +1,4 @@
-.include	"inc.s"
+.include	"inc.asm"
 .include	"gdefs.s"
 
 # game_ball_testx() - Test whether collide in x-direction

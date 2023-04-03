@@ -1,4 +1,4 @@
-.include	"inc.s"
+.include	"inc.asm"
 
 .globl game_sleep
 game_sleep:

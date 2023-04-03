@@ -1,4 +1,4 @@
-.include	"inc.s"
+.include	"inc.asm"
 
 .eqv	kWidth,256	# number of pixels in x-axis
 .eqv	kHeight,256	# number of pixels in y-axis

@@ -1,10 +1,11 @@
-.include	"inc.s"
-.include	"gdefs.s"
+	.include	"inc.asm"
 
 .text
-.globl	main
+	.globl	main
 main:
+	fprologue
 	jal	run
+	fepilogue
 	li	$v0,10
 	syscall
 

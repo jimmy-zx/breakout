@@ -1,4 +1,4 @@
-.include	"inc.s"
+.include	"inc.asm"
 
 .text
 # drawbox(x, y, color, dx, dy)

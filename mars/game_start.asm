@@ -1,5 +1,5 @@
 .include	"gdefs.s"
-.include	"inc.s"
+.include	"inc.asm"
 
 .data
 brick_colors:
