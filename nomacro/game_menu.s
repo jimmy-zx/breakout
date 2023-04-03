@@ -3,6 +3,8 @@ game_over_str:
 	.ascii	"Game over!"
 press_restart_str:
 	.ascii	"Press r to restart."
+press_quit_str:
+	.ascii	"Press q to quit."
 .text
 # 	.include	"gdefs.s"
 # display
@@ -114,6 +116,15 @@ game_menu_over:
 	li	$a1,32	
 	li	$a2,kFgColor	
 	la	$a3,press_restart_str	
+	li	$t0,19	
+	sw	$t0,16($sp)	
+	jal	drawstr	
+
+	# draw "Press q to quit"
+	li	$a0,0	
+	li	$a1,48	
+	li	$a2,kFgColor	
+	la	$a3,press_quit_str	
 	li	$t0,19	
 	sw	$t0,16($sp)	
 	jal	drawstr	
