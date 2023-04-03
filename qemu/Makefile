@@ -30,3 +30,6 @@ rdebug: game
 
 rgdb:
 	gdb-multiarch ./game
+
+nomacro: game
+	./makenomacro.sh
