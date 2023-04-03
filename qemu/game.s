@@ -1,3 +1,4 @@
+	.include	"gdefs.s"
 .data
 	.globl	paddle_x
 paddle_x:	.word	0
@@ -34,7 +35,6 @@ life:	.word	kLife
 
 .text
 	.include	"inc1.s"
-	.include	"gdefs.s"
 
 # run() - the main game loop
 	.globl	run

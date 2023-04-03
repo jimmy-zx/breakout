@@ -76,7 +76,7 @@ game_scoreupdate:
 	jal	drawbox	# drawbox(56, 0, kBgColor, 16, 16)
 	la	$t0,cscore
 	lw	$t1,0($t0)
-	div	$t1,10
+	div	$t1,$t1,10
 	mfhi	$s1	# s1 = score % 10
 	mflo	$s0	# s0 = score // 10
 	addi	$a0,$s0,'0'
@@ -100,7 +100,7 @@ game_scoreupdate:
 	jal	drawbox	# drawbox(56, 0, kBgColor, 16, 16)
 	la	$t0,max_score
 	lw	$t1,0($t0)
-	div	$t1,10
+	div	$t1,$t1,10
 	mfhi	$s1	# s1 = score % 10
 	mflo	$s0	# s0 = score // 10
 	addi	$a0,$s0,'0'
