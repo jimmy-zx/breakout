@@ -53,11 +53,13 @@ game_loop:
 	jal	game_input
 	beq	$v0,1,run_end
 	beq	$v0,2,main_loop
+	la	$t0,life
+	lw	$t1,0($t0)
+	beq	$t1,0,game_norender
 	jal	game_tick
 	beq	$v0,$zero,game_next
 	la	$t0,life
 	lw	$t1,0($t0)
-	beq	$t1,0,game_norender
 	addi	$t1,$t1,-1
 	sw	$t1,0($t0)
 	bne	$t1,0,game_round
