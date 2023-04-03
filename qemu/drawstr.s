@@ -14,8 +14,9 @@ drawstr:
 	lw	$t0,72($sp)	# $t0 = strlen
 	add	$s4,$s3,$t0	# maxstr
 loop:
-	lw	$a0,0($s3)
-	srl	$a0,$a0,24
+	lb	$a0,0($s3)
+	#lw	$a0,0($s3)
+	#srl	$a0,$a0,24
 	move	$a1,$s0
 	move	$a2,$s1
 	move	$a3,$s2
